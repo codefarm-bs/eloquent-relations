@@ -61,4 +61,9 @@ class User extends Authenticatable
             ->using(RoleUser::class)
             ->withTimestamps();
     }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 }

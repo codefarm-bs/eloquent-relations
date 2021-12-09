@@ -5,14 +5,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-    $user = \App\Models\User::first() ?? \App\Models\User::factory()->create();
+//    $user = \App\Models\User::first() ?? \App\Models\User::factory()->create();
+    $post = \App\Models\Post::first() ?? \App\Models\Post::factory()->create();
+    $topic = \App\Models\Topic::first() ?? \App\Models\Topic::create(['name' => 'programming']);
 
-//    $user->roles()->sync([1 => [
-//        'description' => 'some notes here',
-//        'assigner_id' => \App\Models\User::factory()->create()->id
-//    ]]);
+//    $user->image()->create(['url' => 'somewhere/avatar.jpg']);
 
-    return $user->roles->first()->mypivot->assigner;
+
+    $post->tags()->detach();
+    $topic->tags()->detach();
+
+    $post->tags()->attach(\App\Models\Tag::all());
+    $topic->tags()->attach(\App\Models\Tag::all());
+
+
+    return [
+        'posts of #laravel' => \App\Models\Tag::find(1)->posts,
+        'topics of #laravel' => \App\Models\Tag::find(1)->topics
+    ];
 });
 
 
